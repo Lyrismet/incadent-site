@@ -1,5 +1,5 @@
 ---
-import { SUPPORT_EMAIL } from "../config";
+import { FEEDBACK_URL, SUPPORT_EMAIL } from "../config";
 import { dict, type Lang } from "../i18n";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 const { lang } = Astro.props;
 const c = dict(lang).contact;
 const topics = Object.entries(c.topics);
-const text = { send: c.send, sendEmpty: c.sendEmpty, sent: c.sent };
+const text = { send: c.send, sendEmpty: c.sendEmpty, sending: c.sending, sent: c.sent, error: c.error };
 ---
 
 <section id="contact" class="contact">
@@ -20,7 +20,7 @@ const text = { send: c.send, sendEmpty: c.sendEmpty, sent: c.sent };
       <p>{c.lead}</p>
       <a class="mail-big" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
     </div>
-    <form class="form" id="feedback" data-to={SUPPORT_EMAIL} data-topics={JSON.stringify(c.topics)} data-ph={JSON.stringify(c.ph)} data-text={JSON.stringify(text)}>
+    <form class="form" id="feedback" data-endpoint={FEEDBACK_URL ?? ""} data-to={SUPPORT_EMAIL} data-topics={JSON.stringify(c.topics)} data-ph={JSON.stringify(c.ph)} data-text={JSON.stringify(text)}>
       <div class="form-col">
         <div>
           <h3>{c.formTitle}</h3>
@@ -36,13 +36,19 @@ const text = { send: c.send, sendEmpty: c.sendEmpty, sent: c.sent };
           <span>{c.nameLabel}</span>
           <input name="name" placeholder={c.namePh} autocomplete="name" />
         </label>
+        <label class="field">
+          <span>{c.emailLabel}</span>
+          <input name="email" type="email" placeholder={c.emailPh} autocomplete="email" />
+        </label>
       </div>
       <div class="form-col">
         <label class="field grow">
           <span>{c.msgLabel}</span>
-          <textarea rows="7" placeholder={c.ph.idea}></textarea>
+          <textarea name="message" rows="7" placeholder={c.ph.idea}></textarea>
         </label>
-        <a class="send" data-send aria-disabled="true">{c.sendEmpty}</a>
+        <input class="trap" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="send" type="submit" data-send disabled>{c.sendEmpty}</button>
+        <div class="status" data-status role="status" aria-live="polite"></div>
       </div>
     </form>
   </div>

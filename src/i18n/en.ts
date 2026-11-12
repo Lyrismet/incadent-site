@@ -162,7 +162,7 @@ export const en: Dict = {
       {
         "h": "7. Support requests",
         "p": [
-          "If you write to us, we receive your email address and message. We use them only to reply and improve the app. We will delete the conversation on request."
+          "If you write to us by email or through the form on the site, we receive your message and your email address if you give one. The form passes the message to our mailbox through Google services. We use them only to reply and improve the app. We will delete the conversation on request."
         ]
       },
       {
@@ -191,7 +191,7 @@ export const en: Dict = {
     "lead": "Found a bug, stuck on something, or have an idea for what your table is missing? Write to us — we read every message ourselves.",
     "mailLabel": "Support email",
     "formTitle": "Suggest something",
-    "formNote": "Your mail app will open with the message ready — just press Send.",
+    "formNote": "Your message comes straight to us. Leave your email if you would like a reply.",
     "topicLabel": "TOPIC",
     "topics": {
       "idea": "Idea",
@@ -200,6 +200,8 @@ export const en: Dict = {
     },
     "nameLabel": "YOUR NAME · OPTIONAL",
     "namePh": "Name or nickname",
+    "emailLabel": "EMAIL FOR A REPLY · OPTIONAL",
+    "emailPh": "name@example.com",
     "msgLabel": "MESSAGE",
     "ph": {
       "idea": "What is your table missing? Tell us how you play and what you’d like to see.",
@@ -208,7 +210,9 @@ export const en: Dict = {
     },
     "send": "Write email",
     "sendEmpty": "Type a message",
-    "sent": "Opened in your mail app ✓"
+    "sending": "Sending…",
+    "sent": "Thank you, message received ✓",
+    "error": "Could not send. Please try again later or write to the email above."
   },
   "footer": {
     "privacy": "Privacy Policy",
