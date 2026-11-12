@@ -1,0 +1,66 @@
+---
+import Logo from "./Logo.astro";
+import { PLAY_URL } from "../config";
+import { dict, type ChipKind, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = dict(lang);
+const hero = t.hero;
+const demo = t.demo;
+// every segment keeps its index, the script matches chips and codex cards by it
+const segs = demo.segs.map((seg, i) => ({ seg, i }));
+const mentions = segs.flatMap(({ seg, i }) => ("m" in seg ? [{ name: seg.m, kind: seg.k as ChipKind, i }] : []));
+---
+
+<section class="hero">
+  <div class="wrap">
+    <Logo size={64} />
+    <div class="eyebrow">{hero.eyebrow}</div>
+    <h1>{hero.title}</h1>
+    <div class="ornament"><i></i><b></b><i></i></div>
+    <p class="lead">{hero.lead}</p>
+    {PLAY_URL ? (
+      <a class="cta" href={PLAY_URL}>{hero.cta}</a>
+    ) : (
+      <span class="cta soon">{hero.soon}</span>
+    )}
+    <div class="facts">{hero.facts.map((f) => <span>{f}</span>)}</div>
+
+    <div class="demo" data-added={demo.added}>
+      <div class="demo-head">
+        <div class="eyebrow">{demo.eyebrow}</div>
+        <em>{demo.title}</em>
+      </div>
+      <div class="demo-box">
+        <div class="demo-note">
+          <div class="tag"><i></i>{demo.note}</div>
+          <div class="demo-text">
+            {segs.map(({ seg, i }) => "m" in seg
+              ? <span data-part={i} data-chip={seg.k} class={`chip chip-${seg.k}`}>{seg.m}</span>
+              : <span data-part={i}>{seg.t}</span>)}<span class="caret" data-caret></span>
+          </div>
+          <div class="demo-status" data-status></div>
+        </div>
+        <div class="demo-codex">
+          <div class="label">{demo.codex}</div>
+          {mentions.map((m) => (
+            <div class={`demo-card card-${m.kind}`} data-card={m.i}>
+              <span class="avatar">{m.name[0]}</span>
+              <span class="name"><b>{m.name}</b><span>{demo.types[m.kind]}</span></span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initDemo } from "../scripts/demo";
+  const root = document.querySelector<HTMLElement>(".demo");
+  if (root) initDemo(root);
+</script>

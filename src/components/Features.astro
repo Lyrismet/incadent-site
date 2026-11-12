@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets";
+import sessionShot from "../assets/screens/02-session.png";
+import codexShot from "../assets/screens/03-codex.png";
+import combatShot from "../assets/screens/04-combat.png";
+import meShot from "../assets/screens/05-me.png";
+import { dict, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const feat = dict(lang).feat;
+// the order matches feat.items in the dictionaries
+const shots = [sessionShot, codexShot, combatShot, meShot];
+const widths = [290, 580];
+---
+
+<section id="features" class="features">
+  <div class="wrap features-head">
+    <div class="eyebrow">{feat.eyebrow}</div>
+    <h2 class="h2">{feat.title}</h2>
+  </div>
+  <div class="wrap features-grid">
+    <div class="phone-col">
+      <div class="phone-frame">
+        {feat.items.map((it, i) => (
+          <Image class="phone" data-i={i} src={shots[i]} alt={it.alt} widths={widths} sizes="(min-width: 960px) 350px, 290px" loading={i === 0 ? "eager" : "lazy"} />
+        ))}
+      </div>
+    </div>
+    <div>
+      {feat.items.map((it, i) => (
+        <div class="chapter" data-ch={i}>
+          <span class="num">{it.num}</span>
+          <h3>{it.title}</h3>
+          <p>{it.text}</p>
+          <div class="phone-inline">
+            <Image class="phone" src={shots[i]} alt={it.alt} widths={widths} sizes="290px" loading="lazy" />
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="wrap extras">
+    <div class="extras-grid">
+      {feat.extras.map((x) => <div class="extra"><i></i><b>{x.t}</b><span>{x.d}</span></div>)}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initFeatures } from "../scripts/features";
+  const root = document.querySelector<HTMLElement>(".features");
+  if (root) initFeatures(root);
+</script>

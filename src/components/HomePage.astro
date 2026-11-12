@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Contact from "./Contact.astro";
+import Features from "./Features.astro";
+import Hero from "./Hero.astro";
+import { dict, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = dict(lang);
+---
+
+<Layout lang={lang} path="" title={`Incadent — ${t.hero.title}`} description={t.hero.lead}>
+  <Hero lang={lang} />
+  <Features lang={lang} />
+  <Contact lang={lang} />
+</Layout>

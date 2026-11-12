@@ -1,0 +1,55 @@
+---
+import { SUPPORT_EMAIL } from "../config";
+import { dict, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = dict(lang).contact;
+const topics = Object.entries(c.topics);
+const text = { send: c.send, sendEmpty: c.sendEmpty, sent: c.sent };
+---
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="contact-head">
+      <div class="eyebrow">{c.eyebrow}</div>
+      <h2 class="h2">{c.title}</h2>
+      <p>{c.lead}</p>
+      <a class="mail-big" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+    </div>
+    <form class="form" id="feedback" data-to={SUPPORT_EMAIL} data-topics={JSON.stringify(c.topics)} data-ph={JSON.stringify(c.ph)} data-text={JSON.stringify(text)}>
+      <div class="form-col">
+        <div>
+          <h3>{c.formTitle}</h3>
+          <div class="note">{c.formNote}</div>
+        </div>
+        <div class="field">
+          <div class="field-label">{c.topicLabel}</div>
+          <div class="topics">
+            {topics.map(([key, label]) => <button type="button" data-topic={key} aria-pressed={key === "idea"}>{label}</button>)}
+          </div>
+        </div>
+        <label class="field">
+          <span>{c.nameLabel}</span>
+          <input name="name" placeholder={c.namePh} autocomplete="name" />
+        </label>
+      </div>
+      <div class="form-col">
+        <label class="field grow">
+          <span>{c.msgLabel}</span>
+          <textarea rows="7" placeholder={c.ph.idea}></textarea>
+        </label>
+        <a class="send" data-send aria-disabled="true">{c.sendEmpty}</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { initContact } from "../scripts/contact";
+  const form = document.querySelector<HTMLFormElement>("#feedback");
+  if (form) initContact(form);
+</script>

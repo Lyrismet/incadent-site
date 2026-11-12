@@ -1,0 +1,17 @@
+{
+  "name": "incadent-site",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@fontsource/alegreya": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "astro": "^7.4.11",
+    "typescript": "^6.0.3"
+  }
+}

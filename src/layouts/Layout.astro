@@ -1,0 +1,68 @@
+---
+import "../styles/global.css";
+import Logo from "../components/Logo.astro";
+import { SUPPORT_EMAIL } from "../config";
+import { dict, langs, pageUrl, type Lang, type PagePath } from "../i18n";
+
+interface Props {
+  lang: Lang;
+  path: PagePath;
+  title: string;
+  description: string;
+}
+
+const { lang, path, title, description } = Astro.props;
+const t = dict(lang);
+const home = path === "";
+const favicon = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/icon.png`;
+// on the privacy page the section links point back to the home page
+const homeUrl = pageUrl(lang, "");
+---
+
+<!doctype html>
+<html lang={t.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b0c10" />
+    {langs.map((l) => <link rel="alternate" hreflang={l} href={new URL(pageUrl(l, path), Astro.site)} />)}
+    <link rel="icon" href={favicon} />
+  </head>
+  <body data-home={home ? "" : undefined}>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={homeUrl}><Logo size={24} /><span>Incadent</span></a>
+        <nav>
+          <a href={`${homeUrl}#features`}>{t.nav.features}</a>
+          <a href={pageUrl(lang, "privacy/")}>{t.nav.privacy}</a>
+          <a href={`${homeUrl}#contact`}>{t.nav.contact}</a>
+          <div class="seg" role="group" aria-label="Language">
+            {langs.map((l) => (
+              <a data-lang={l} href={pageUrl(l, path)} hreflang={l} aria-current={l === lang ? "true" : undefined}>{l.toUpperCase()}</a>
+            ))}
+          </div>
+        </nav>
+      </div>
+    </header>
+    <main><slot /></main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-row">
+          <span class="brand"><Logo size={18} /><span>Incadent</span></span>
+          <span class="copy">© 2026</span>
+          <a href={pageUrl(lang, "privacy/")}>{t.footer.privacy}</a>
+          <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+        </div>
+        <div class="srd">{t.footer.srd}</div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<script>
+  import { redirectToPreferred, rememberChoice } from "../scripts/lang";
+  rememberChoice();
+  if (document.body.hasAttribute("data-home")) redirectToPreferred(document.documentElement.lang);
+</script>

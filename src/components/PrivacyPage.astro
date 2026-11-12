@@ -1,0 +1,40 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { dict, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const p = dict(lang).privacy;
+---
+
+<Layout lang={lang} path="privacy/" title={`${p.title} — Incadent`} description={p.summary}>
+  <div class="privacy">
+    <div class="wrap">
+      <aside>
+        {p.sections.map((s, i) => <a href={`#pv-${i}`}>{s.h}</a>)}
+      </aside>
+      <div class="privacy-body">
+        <div class="privacy-head">
+          <div class="eyebrow">{p.eyebrow}</div>
+          <h1 class="h2">{p.title}</h1>
+          <time>{p.date}</time>
+        </div>
+        <p class="privacy-summary">{p.summary}</p>
+        <div class="privacy-sections">
+          {p.sections.map((s, i) => (
+            <section id={`pv-${i}`}>
+              <h2>{s.h}</h2>
+              {s.p.map((text) => <p>{text}</p>)}
+              {s.link && (
+                <a class="ext" href={s.link.href} target={s.link.href.startsWith("http") ? "_blank" : undefined} rel="noopener">{s.link.t}</a>
+              )}
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
